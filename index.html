@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>Coffee's Mafer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        /* RESET & GENERAL */
+        * { box-sizing: border-box; }
+        body {
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-image: url('caff1.jpg');
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            scroll-behavior: smooth;
+        }
+        header {
+            background: #6f4e37 url('fondo-cafevida.jpg') repeat center center / cover;
+            background-blend-mode: multiply;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+        }
+        header .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        header img {
+            height: 140px; /* Adjusted height from coffe.html */
+            border-radius: 8px;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif; /* From coffe.html */
+            font-weight: bold; /* From coffe.html */
+        }
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .top-right input[type="search"] {
+            padding: 6px 10px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+            width: 200px;
+        }
+        .top-right button#toggleCarrito {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            position: relative;
+        }
+        .top-right button#toggleCarrito .badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: #c0392b;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+        }
+
+        nav {
+            background: #4b3621;
+            display: flex;
+            justify-content: center;
+        }
+        nav a {
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        nav a:hover {
+            background: #6f4e37;
+        }
+        .slogan {
+            text-align: center;
+            background: #ffe6ec;
+            font-style: italic;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: #6f4e37;
+        }
+        .slogan i {
+            font-size: 1.3rem;
+        }
+        section {
+            padding: 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+        /* FILTROS */
+        .filters {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+            font-size: 1rem;
+            min-width: 180px;
+        }
+        select:disabled {
+            background: #f0e6d7;
+        }
+        /* PRODUCTOS */
+        #productos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .product {
+            background: #ffe6ec;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgb(0 0 0 / 0.1);
+            padding: 15px;
+            width: 260px;
+            text-align: center;
+            position: relative;
+        }
+        .product img {
+            width: 150px;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product h3 {
+            margin: 10px 0 5px;
+            font-size: 1.1rem;
+        }
+        .product p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            background: #8b5a2b;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        button:hover {
+            background: #6f4e37;
+        }
+        button i {
+            font-size: 1.1rem;
+        }
+        /* CARRITO FIJO DERECHA */
+        #carrito {
+            position: fixed;
+            top: 80px;
+            right: 0;
+            width: 340px;
+            background: #f7f7f7;
+            border-left: 3px solid #6f4e37;
+            height: calc(100vh - 80px);
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1000;
+            background: url('FORM2.jpg') no-repeat center center / cover; /* From Index.html */
+        }
+        #carrito h2 {
+            margin-top: 0;
+            color: #6f4e37;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffe6ec;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            gap: 5px;
+        }
+        .cart-item span {
+            flex: 1;
+        }
+        .cart-item button {
+            background: #c0392b;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin-left: 10px;
+        }
+        #totalPrecio {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #6f4e37;
+            text-align: right;
+        }
+        /* FORMULARIO CONTACTO */
+        #contacto {
+            max-width: 500px;
+            margin: 40px auto 80px;
+            background: url('Fon22.jpg') no-repeat center center / cover;
+            backdrop-filter: blur(8px);
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+            color: #4b3621;
+        }
+        #contacto label, #contacto input, #contacto textarea {
+            color: #1f120a;
+            font-weight: bold;
+        }
+        #contacto h2 {
+            color: #1f120a;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #contacto h2 i {
+            font-size: 1.3rem;
+        }
+        #contacto input, #contacto textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        #contacto button {
+            width: 100%;
+            background: #8b5a2b;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        #contacto button:hover {
+            background: #6f4e37;
+        }
+        /* FOOTER */
+        footer {
+            background: #6f4e37;
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        footer p {
+            margin: 0 0 10px;
+        }
+        footer a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: #d1b47f;
+        }
+        /* RESPONSIVE */
+        @media(max-width: 768px){
+            main {
+                margin-right: 0;
+                flex-direction: column;
+                align-items: center;
+            }
+            #carrito {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                height: 300px;
+                border-left: none;
+                border-top: 3px solid #6f4e37;
+                display: none;
+            }
+            .top-right input[type="search"] {
+                width: 120px;
+            }
+        }
+
+        /* MODAL DE SABOR */
+        #modalSabor {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+        #modalSabor .contenido {
+            background: #f7f7f7;
+            border-radius: 10px;
+            padding: 25px 30px;
+            width: 350px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            text-align: center;
+            background: url('FORM2.jpg') no-repeat center center / cover; /* from index.html */
+        }
+        #modalSabor h3 {
+            margin-top: 0;
+            color: #6f4e37;
+        }
+        #modalSabor select {
+            width: 100%;
+            font-size: 1rem;
+            padding: 8px 12px;
+            margin: 15px 0 25px;
+        }
+        #modalSabor button {
+            background: #8b5a2b;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        #modalSabor button:hover {
+            background: #6f4e37;
+        }
+
+        .product button {
+            display: block;
+            margin: 10px auto 0;
+        }
+
+        .tipo-header {
+            width: 100%;
+            font-size: 1.3rem;
+            font-weight: bold;
+            background-color: #8b5a2b;
+            color: white;
+            padding: 14px 24px;
+            margin: 40px 0 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .cart-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffe6ec;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            gap: 8px;
+        }
+        .cart-item span {
+            flex: 1 1 100%;
+            font-size: 0.85rem;
+            white-space: normal;
+            word-break: break-word;
+        }
+        .cart-item img {
+            width: 40px;
+            height: auto;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        #listaCarrito {
+            padding-top: 10px;
+        }
+        .cart-item:first-child {
+            margin-top: 10px;
+        }
+
+        /* Modal specific styles for login/register and other modals */
+        .modal-background {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000; /* Higher than other modals */
+        }
+        .modal-content {
+            background: url('FORM2.jpg') no-repeat center center / cover;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+        }
+        .modal-content h3 {
+            color: #6f4e37;
+            margin-top: 0;
+            text-align: center;
+        }
+        .modal-content label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4b3621; /* Darker for readability */
+            font-weight: bold;
+        }
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .modal-content button {
+            background: #8b5a2b;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-content button:hover {
+            background: #6f4e37;
+        }
+        .modal-content .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-content .button-group button {
+            flex: 1;
+        }
+        #loginMessage, #registerMessage {
+            color: red;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .welcome-text {
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+            display: inline-block;
+        }
+        #cerrarSesion {
+            background: none;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            display: none; /* Hidden by default, shown on login */
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+<header style="background: #6f4e37 url('fondo-cafevida.jpeg') repeat center center / cover; background-blend-mode: multiply; color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1001;">
+<div class="logo" tabindex="0"><img alt="Coffee's Mafer" src="1.png" style="height: 140px; border-radius: 8px;"/>
+<h1 style="font-family: 'Georgia', serif; font-weight: bold;">Coffee's Mafer</h1>
+    </div>
+    <div class="top-right">
+        <span id="usuarioNombre" class="welcome-text"></span>
+        <button id="cerrarSesion">
+            <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+        </button>
+        <input aria-label="Buscar productos" id="buscador" placeholder="Buscar café..." type="search"/>
+        <button aria-label="Mostrar carrito de compras" id="toggleCarrito">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="badge" id="contadorCarrito">0</span>
+        </button>
+    </div>
+</header>
+<nav>
+    <a href="#inicio" onclick="scrollToSection(event)"><i class="fa-solid fa-house"></i> Inicio</a>
+    <a href="#productos-seccion" onclick="scrollToSection(event)"><i class="fa-solid fa-mug-hot"></i> Productos</a>
+    <a href="#contacto" onclick="scrollToSection(event)"><i class="fa-solid fa-address-book"></i> Contacto</a>
+</nav>
+<div class="slogan">
+    <i class="fa-solid fa-seedling"></i> La Mezcla Perfecta Para Cada Grano de café<i class="fa-solid fa-seedling"></i>
+</div>
+<main>
+    <section id="inicio" tabindex="0">
+        <div style="background: #ffe6ec; border-radius: 10px; box-shadow: 0 0 8px rgb(0 0 0 / 0.1); padding: 20px; max-width: 800px; margin: 0 auto 20px;">
+            <h2 style="text-align: center; color: #6f4e37;"><i class="fa-solid fa-handshake"></i> Bienvenido a mi tienda</h2>
+            <p style="font-size: 1.15rem; text-align: center; color: #4b3621; font-weight: bold;">Coffee's Mafer: Tu espacio perfecto para descubrir, saborear y disfrutar el auténtico sabor, aroma y calidez de un buen café en cada momento.</p>
+            <p style="font-size: 1.15rem; text-align: center; color: #4b3621; font-weight: bold;">¡Tu compra perfecta empieza aquí!</p>
+        </div>
+    </section>
+    <section id="productos-seccion" tabindex="0">
+        <h2><i class="fa-solid fa-mug-saucer"></i> Catálogo de Productos</h2>
+        <div class="tipo-header">Presentación de Café</div>
+        <div style="background-color: #ffe6ec; padding: 12px 16px; border-radius: 10px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 0 20px;">
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-bag-shopping" style="margin-right: 6px;"></i>255grs</span>
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-bag-shopping" style="margin-right: 6px;"></i>500grs</span>
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-bag-shopping" style="margin-right: 6px;"></i>1 kilo</span>
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-bag-shopping" style="margin-right: 6px;"></i>12 sobres</span>
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-bag-shopping" style="margin-right: 6px;"></i>Bebida</span>
+        </div>
+        <div class="tipo-header">Variedad de Sabores</div>
+        <div style="background-color: #ffe6ec; padding: 12px 16px; border-radius: 10px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 0 20px;">
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-mug-hot" style="margin-right: 6px;"></i>Amargo</span>
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-cookie-bite" style="margin-right: 6px;"></i>Chocolate</span>
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-coffee" style="margin-right: 6px;"></i>Clásico</span>
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-apple-alt" style="margin-right: 6px;"></i>Frutal</span>
+            <span style="background-color: #888; color: white; padding: 8px 16px; border-radius: 20px;"><i class="fa-solid fa-ice-cream" style="margin-right: 6px;"></i>Vainilla</span>
+        </div>
+        <div aria-label="Filtros para los productos" class="filters">
+            <select aria-label="Filtrar por tipos de café" id="filtroClase">
+                <option value="todos">Tipos de café</option>
+            </select>
+            <select aria-label="Filtrar por tipo de presentación" id="filtroPresentacion">
+                <option value="todos">Tipo de Presentación</option>
+            </select>
+        </div>
+        <div aria-atomic="true" aria-live="polite" id="productos"></div>
+    </section>
+    <section aria-label="Formulario de cliente" id="contacto" tabindex="0">
+        <h2>Formulario de cliente</h2>
+        <form id="formContacto">
+            <label for="nombre">Nombre:</label>
+            <input autocomplete="name" id="nombre" name="nombre" type="text"/>
+            <label for="email">Correo electrónico:</label>
+            <input autocomplete="email" id="email" name="email" type="email"/>
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" rows="4"></textarea>
+            <button type="submit"><i class="fa-solid fa-paper-plane"></i> Enviar</button>
+        </form>
+    </section>
+</main>
+
+<aside aria-label="Carrito de compras" id="carrito">
+    <h2><i class="fa-solid fa-cart-shopping"></i> Carrito de Compras</h2>
+    <p style="font-weight:bold; font-size:1.1rem; color:#6f4e37; text-align:center; margin-bottom:10px;">CARRITO DE COMPRAS</p>
+    <h3 style="color:#6f4e37; margin-bottom: 10px;">Carrito de Compras</h3>
+    <div aria-atomic="true" aria-live="polite" id="listaCarrito"></div>
+    <p id="totalPrecio">Total: $0.00</p>
+    <button id="btnPagar" style="margin-top: 10px; width: 100%; background: #8b5a2b; color: white;">
+        <i class="fa-solid fa-credit-card"></i> Pagar
+    </button>
+</aside>
+
+<div aria-describedby="modalDescripcion" aria-labelledby="modalTitulo" aria-modal="true" id="modalSabor" role="dialog" class="modal-background">
+    <div class="contenido" class="modal-content">
+        <h3 id="modalTitulo">Elige el sabor para el café</h3>
+        <p id="modalDescripcion">Selecciona el sabor que prefieras antes de agregar al carrito.</p>
+        <select aria-label="Seleccionar sabor del café" id="selectSaborModal"></select>
+        <input id="cantidadSaborModal" min="1" placeholder="Cantidad a comprar" style="width: 100%; margin-top: 10px; padding: 8px; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px;" type="number" value="1"/>
+        <button id="confirmarSabor"><i class="fa-solid fa-check"></i> Confirmar</button>
+    </div>
+</div>
+
+<footer>
+    <p>Síguenos en nuestras redes sociales:</p>
+    <a aria-label="WhatsApp" href="https://whatsapp.com/channel/0029Vb5rtVbATRSjyz8Ns40n"><i class="fa-brands fa-whatsapp"></i></a>
+    <a aria-label="Facebook" href="https://www.facebook.com/share/15tbZvCimN/"><i class="fa-brands fa-facebook"></i></a>
+    <a aria-label="Instagram" href="https://www.instagram.com/coffes_mafek_?igsh=MWN4eG1xNndhYXg3cA=="><i class="fa-brands fa-instagram"></i></a>
+    <p>Email: coffeesmafer@gmail.com</p>
+    <p>Número de teléfono: 771-890-1380</p>
+    <p>© 2025 Tienda Coffee'sMafer. Todos los derechos reservados.</p>
+</footer>
+
+<div id="modalAuth" class="modal-background">
+    <div class="modal-content">
+        <div id="loginFormSection">
+            <h3>Iniciar Sesión</h3>
+            <p id="loginMessage" style="color:red;"></p>
+            <form id="formLogin">
+                <label for="loginEmail">Correo electrónico:</label>
+                <input id="loginEmail" type="email" autocomplete="email" required/>
+                <label for="loginPassword">Contraseña:</label>
+                <input id="loginPassword" type="password" autocomplete="current-password" required/>
+                <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
+            </form>
+            <div class="button-group">
+                <button id="showRegisterBtn" style="background:#6f4e37;"><i class="fa-solid fa-user-plus"></i> ¿No tienes cuenta? Regístrate</button>
+                </div>
+        </div>
+
+        <div id="registerFormSection" style="display:none;">
+            <h3>Registro de Usuario</h3>
+            <p id="registerMessage" style="color:red;"></p>
+            <form id="formRegistro">
+                <label for="regNombre">Nombre completo:</label>
+                <input id="regNombre" type="text" required/>
+                <label for="regEmail">Correo electrónico:</label>
+                <input id="regEmail" type="email" autocomplete="email" required/>
+                <label for="regPassword">Contraseña:</label>
+                <input id="regPassword" type="password" required/>
+                <label for="regConfirmPassword">Confirmar Contraseña:</label>
+                <input id="regConfirmPassword" type="password" required/>
+                <div class="button-group">
+                    <button type="submit"><i class="fa-solid fa-user-plus"></i> Registrarse</button>
+                    <button id="showLoginBtn" style="background:#6f4e37;" type="button"><i class="fa-solid fa-arrow-left"></i> Volver a Iniciar Sesión</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="modalPago" class="modal-background" style="display:none;">
+    <div class="modal-content">
+        <h3>Selecciona tu método de pago</h3>
+        <form id="formPago">
+            <div style="font-weight:bold; font-size:1.1rem; color:#6f4e37; margin-bottom:10px;">
+                Total a pagar: <span id="totalEnModal">$0.00</span>
+            </div>
+            <label>Método de pago:</label>
+            <select id="metodoPago" style="width:100%; padding:8px; margin-bottom:15px;">
+                <option>--Selecciona--</option>
+                <option value="tarjeta">Tarjeta de crédito / débito</option>
+                <option value="transferencia">Transferencia bancaria</option>
+            </select>
+            <div id="pagoTarjeta" style="display:none;">
+                <label>Nombre en la tarjeta:</label>
+                <input style="width:100%; margin-bottom:10px; padding:8px;" type="text"/>
+                <label>Número de tarjeta:</label>
+                <input maxlength="16" pattern="\d{16}" placeholder="•••• •••• •••• ••••" style="width:100%; margin-bottom:10px; padding:8px;" type="text"/>
+                <label>Fecha de expiración:</label>
+                <input style="width:100%; margin-bottom:10px; padding:8px;" type="month"/>
+                <label>CVV:</label>
+                <input maxlength="3" pattern="\d{3}" style="width:100%; margin-bottom:10px; padding:8px;" type="text"/>
+            </div>
+            <div id="pagoTransferencia" style="display:none;">
+                <p style="margin-bottom:10px;">Realiza tu transferencia a la cuenta:<br/><strong>1234 5678 9012 3456</strong><br/>Banco Café SA</p>
+                <label>Nombre del titular de la cuenta:</label>
+                <input style="width:100%; margin-bottom:10px; padding:8px;" type="text"/>
+                <label>Referencia de pago:</label>
+                <input placeholder="Ej. #Pedido1234" style="width:100%; margin-bottom:10px; padding:8px;" type="text"/>
+            </div>
+            <div class="button-group">
+                <button id="cancelarPago" style="flex:1;" type="button">Cancelar</button>
+                <button style="flex:1;" type="submit">Confirmar pago</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalDireccionEnvio" class="modal-background" style="display:none;">
+    <div class="modal-content">
+        <h3>Dirección de Envío</h3>
+        <p style="color:#6f4e37; text-align:center; margin-bottom:15px;">Por favor, ingresa los datos para el envío de tu pedido.</p>
+        <form id="formDireccionEnvio">
+            <label for="calleNumero">Calle y Número:</label>
+            <input type="text" id="calleNumero" required placeholder="Ej. Calle Falsa 123"/>
+
+            <label for="colonia">Colonia:</label>
+            <input type="text" id="colonia" required placeholder="Ej. Centro"/>
+
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" required placeholder="Ej. Ciudad de México"/>
+
+            <label for="codigoPostal">Código Postal:</label>
+            <input type="text" id="codigoPostal" required pattern="[0-9]{5}" title="Introduce un código postal de 5 dígitos" placeholder="Ej. 01234"/>
+
+            <label for="referencias">Referencias Adicionales (opcional):</label>
+            <textarea id="referencias" rows="3" placeholder="Ej. Casa con portón azul, enfrente de un parque."></textarea>
+
+            <div class="button-group">
+                <button id="cancelarDireccion" type="button" style="flex:1;">Cancelar</button>
+                <button type="submit" style="flex:1;">Confirmar Pedido</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalIngredientes" class="modal-background" style="display:none;">
+    <div class="modal-content" style="width:380px; text-align:center;">
+        <h3>Información del Café</h3>
+        <p id="contenidoIngredientes" style="color:#4b3621; font-size:0.95rem; margin-bottom:15px;"></p>
+        <div id="preparacionRecomendada" style="font-size:0.9rem; color:#4b3621; background:#f9f1e7; padding:10px 15px; border-radius:6px;"></div>
+        <button onclick="document.getElementById('modalIngredientes').style.display='none';" style="margin-top:20px;">
+            <i class="fa-solid fa-times"></i> Cerrar
+        </button>
+    </div>
+</div>
+
+<script>
+    // DATOS DE PRODUCTOS
+    const productos = [
+        { "id": 100, "nombre": "Café grano Amargo 255g", "precio": 60, "clase": "Café de grano", "sabor": "Amargo", "presentacion": "Sobres de café 255 grs", "imagen": "13.png" },
+        { "id": 101, "nombre": "Café grano Amargo 500g", "precio": 80, "clase": "Café de grano", "sabor": "Amargo", "presentacion": "Sobres de café 500 grs", "imagen": "6.png" },
+        { "id": 102, "nombre": "Café grano Amargo kilo", "precio": 100, "clase": "Café de grano", "sabor": "Amargo", "presentacion": "Sobres de café 1 kilo", "imagen": "12.png" },
+        { "id": 200, "nombre": "Café molido Clásico 255g", "precio": 60, "clase": "Café molido", "sabor": "Clásico", "presentacion": "Sobres de café 255 grs", "imagen": "5.png" },
+        { "id": 201, "nombre": "Café molido Clásico 500g", "precio": 80, "clase": "Café molido", "sabor": "Clásico", "presentacion": "Sobres de café 500 grs", "imagen": "8.png" },
+        { "id": 202, "nombre": "Café molido Clásico kilo", "precio": 100, "clase": "Café molido", "sabor": "Clásico", "presentacion": "Sobres de café 1Kilo", "imagen": "3.png" },
+        { "id": 300, "nombre": "Café soluble Clásico 255g", "precio": 60, "clase": "Café soluble", "sabor": "Clásico", "presentacion": "Sobres de café 255 grs", "imagen": "13.png" },
+        { "id": 301, "nombre": "Café soluble Clásico 500g", "precio": 80, "clase": "Café soluble", "sabor": "Clásico", "presentacion": "Sobres de café 500 grs", "imagen": "7.png" },
+        { "id": 302, "nombre": "Café soluble Clásico kilo", "precio": 100, "clase": "Café soluble", "sabor": "Clásico", "presentacion": "Sobres de café 1Kilo", "imagen": "6.png" },
+        { "id": 13, "nombre": "Café Descafeinado Clásico", "precio": 38, "clase": "Café descafeinado", "sabor": "Clásico", "presentacion": "Sobres de 12 pzas", "imagen": "9.png" },
+        { "id": 14, "nombre": "Café Descafeinado Vainilla", "precio": 38, "clase": "Café descafeinado", "sabor": "Vainilla", "presentacion": "Sobres de 12 pzas", "imagen": "10.png" },
+        { "id": 15, "nombre": "Café Descafeinado Frutal", "precio": 38, "clase": "Café descafeinado", "sabor": "Frutal", "presentacion": "Sobres de 12 pzas", "imagen": "9.png" },
+        { "id": 17, "nombre": "Latte Clásico", "precio": 15, "clase": "Bebida de café", "sabor": "Clásico", "presentacion": "Bebida de café 200ml", "imagen": "2.png" },
+        { "id": 18, "nombre": "Capuchino Vainilla", "precio": 18, "clase": "Bebida de café", "sabor": "Vainilla", "presentacion": "Bebida de café 250ml", "imagen": "14.png" },
+        { "id": 19, "nombre": "Mocha Chocolate", "precio": 32, "clase": "Bebida de café", "sabor": "Chocolate", "presentacion": "Bebida de café 1L", "imagen": "15.png" }
+    ];
+
+    let carrito = [];
+
+    const filtroPresentacion = document.getElementById("filtroPresentacion");
+    const filtroClase = document.getElementById("filtroClase");
+    const productosDiv = document.getElementById("productos");
+    const buscador = document.getElementById("buscador");
+    const carritoDiv = document.getElementById("carrito");
+    const contadorCarrito = document.getElementById("contadorCarrito");
+
+    const modalAuth = document.getElementById("modalAuth");
+    const loginFormSection = document.getElementById("loginFormSection");
+    const registerFormSection = document.getElementById("registerFormSection");
+    const showRegisterBtn = document.getElementById("showRegisterBtn");
+    const showLoginBtn = document.getElementById("showLoginBtn");
+    // const cancelAuthModal = document.getElementById("cancelAuthModal"); // Removed this button
+
+    const formLogin = document.getElementById("formLogin");
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+    const loginMessage = document.getElementById("loginMessage");
+
+    const formRegistro = document.getElementById("formRegistro");
+    const regNombre = document.getElementById("regNombre");
+    const regEmail = document.getElementById("regEmail");
+    const regPassword = document.getElementById("regPassword");
+    const regConfirmPassword = document.getElementById("regConfirmPassword");
+    const registerMessage = document.getElementById("registerMessage");
+
+    const usuarioNombreSpan = document.getElementById("usuarioNombre");
+    const cerrarSesionBtn = document.getElementById("cerrarSesion");
+
+
+    // ====== BUSCADOR ======
+    function normalizarTexto(texto) {
+        return texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "") // elimina acentos
+            .replace(/["']/g, "") // elimina comillas
+            .trim();
+    }
+
+    function distancia(a, b) {
+        const matrix = Array.from({ length: a.length + 1 }, () => []);
+        for (let i = 0; i <= a.length; i++) matrix[i][0] = i;
+        for (let j = 0; j <= b.length; j++) matrix[0][j] = j;
+
+        for (let i = 1; i <= a.length; i++) {
+            for (let j = 1; j <= b.length; j++) {
+                const costo = a[i - 1] === b[j - 1] ? 0 : 1;
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j - 1] + costo
+                );
+            }
+        }
+        return matrix[a.length][b.length];
+    }
+
+    // MODAL DE SABOR
+    const modalSabor = document.getElementById("modalSabor");
+    const selectSaborModal = document.getElementById("selectSaborModal");
+    const confirmarSaborBtn = document.getElementById("confirmarSabor");
+    let productoTemporal = null; // Guarda el producto al que se le va a asignar sabor
+    function getUnicosPorCampo(campo) {
+        return [...new Set(productos.map(p => p[campo]))].sort();
+    }
+
+    // INICIALIZAR FILTRO PRESENTACIÓN
+    function cargarFiltroPresentacion(filtrarClase = null) {
+        let presentaciones = productos
+            .filter(p => !filtrarClase || p.clase === filtrarClase)
+            .map(p => p.presentacion);
+        presentaciones = [...new Set(presentaciones)].sort();
+        filtroPresentacion.innerHTML = `<option value="todos">Tipo de Presentación</option>`;
+        presentaciones.forEach(p => {
+            filtroPresentacion.innerHTML += `<option value="${p}">${p}</option>`;
+        });
+    }
+
+    function cargarFiltroClase() {
+        filtroClase.innerHTML = `<option value="todos">Clase de café</option>`;
+        const clases = getUnicosPorCampo("clase");
+        clases.forEach(c => filtroClase.innerHTML += `<option value="${c}">${c}</option>`);
+        filtroClase.disabled = false;
+    }
+
+    function mostrarProductos() {
+        let pres = filtroPresentacion.value;
+        let clase = filtroClase.value;
+        let textoBusqueda = normalizarTexto(buscador.value);
+        let palabrasBusqueda = textoBusqueda.split(/\s+/);
+
+        let filtrados = productos.filter(p => {
+            const textoProducto = normalizarTexto(
+                p.nombre + ' ' + p.presentacion + ' ' + p.clase + ' ' + p.sabor
+            );
+            return (pres === "todos" || p.presentacion === pres)
+                && (clase === "todos" || p.clase === clase)
+                && palabrasBusqueda.every(palabra =>
+                    textoProducto.split(/\s+/).some(palabraProd =>
+                        palabraProd.includes(palabra) || distancia(palabra, palabraProd) <= 2
+                    )
+                );
+        });
+
+        productosDiv.innerHTML = "";
+        if (filtrados.length === 0) {
+            productosDiv.innerHTML = "<p>No se encontraron productos.</p>";
+            return;
+        }
+
+        filtrados.forEach(p => {
+            productosDiv.innerHTML += `
+                <article class="product" tabindex="0" aria-label="${p.nombre}, clase: ${p.clase}, sabor: ${p.sabor}, presentación: ${p.presentacion}">
+                    <img src="${p.imagen}" alt="Imagen de ${p.nombre}" />
+                    <h3>${p.clase}</h3>
+                    <p><strong>Tipo:</strong> ${p.clase}</p>
+                    <p><strong>Presentación:</strong> ${p.presentacion}</p>
+                    <p><strong>Precio:</strong> $${p.precio.toFixed(2)}</p>
+                    <button class="btnIngredientes" data-id="${p.id}" aria-label="Ver descripción de ${p.nombre}">
+                        <i class="fa-solid fa-file-alt"></i> Descripción
+                    </button>
+                    <button class="btnComprar" data-id="${p.id}" aria-label="Comprar ${p.nombre}">
+                        <i class="fa-solid fa-cart-plus"></i> Comprar
+                    </button>
+                </article>`;
+        });
+
+        // Agregar evento a botones comprar
+        document.querySelectorAll(".btnComprar").forEach(btn => {
+            btn.addEventListener("click", abrirModalSabor);
+        });
+    }
+
+    // ABRIR MODAL PARA ELEGIR SABOR
+    function abrirModalSabor(e) {
+        const idProducto = parseInt(e.currentTarget.dataset.id);
+        productoTemporal = productos.find(p => p.id === idProducto);
+
+        const saboresUnicos = getUnicosPorCampo("sabor");
+        selectSaborModal.innerHTML = "";
+        saboresUnicos.forEach(sabor => {
+            selectSaborModal.innerHTML += `<option value="${sabor}">${sabor}</option>`;
+        });
+        selectSaborModal.value = productoTemporal.sabor;
+
+        modalSabor.style.display = "flex";
+        selectSaborModal.focus();
+    }
+
+    // CONFIRMAR SABOR SELECCIONADO Y AGREGAR AL CARRITO
+    confirmarSaborBtn.addEventListener("click", () => {
+        const cantidad = parseInt(document.getElementById("cantidadSaborModal").value) || 1;
+        const saborElegido = selectSaborModal.value;
+        if (!productoTemporal) return;
+
+        const index = carrito.findIndex(p => p.id === productoTemporal.id && p.sabor === saborElegido);
+        if (index !== -1) {
+            carrito[index].cantidad += cantidad;
+        } else {
+            carrito.push({
+                ...productoTemporal,
+                sabor: saborElegido,
+                cantidad
+            });
+        }
+
+        actualizarCarrito();
+        modalSabor.style.display = "none";
+        productoTemporal = null;
+    });
+
+    // CERRAR MODAL AL HACER CLICK FUERA DEL CONTENIDO
+    modalSabor.addEventListener("click", e => {
+        if (e.target === modalSabor) {
+            modalSabor.style.display = "none";
+            productoTemporal = null;
+        }
+    });
+
+    // ACTUALIZAR CARRITO Y MOSTRAR
+    function actualizarCarrito() {
+        const listaCarrito = document.getElementById("listaCarrito");
+        listaCarrito.innerHTML = "";
+        let total = 0;
+
+        carrito.forEach(item => {
+            total += item.precio * item.cantidad;
+
+            listaCarrito.innerHTML += `
+                <div class="cart-item" tabindex="0" aria-label="Producto en carrito: ${item.nombre}, sabor: ${item.sabor}, cantidad: ${item.cantidad}, precio unitario: $${item.precio.toFixed(2)}">
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                        <img src="${item.imagen}" alt="Miniatura de ${item.nombre}" style="width: 40px; height: auto; border-radius: 4px;" />
+                        <span style="font-size: 0.85rem;">${item.nombre} (${item.sabor}) x${item.cantidad}</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                        <span style="font-size: 0.85rem;">$${item.precio.toFixed(2)}</span>
+                        <button aria-label="Eliminar ${item.nombre} del carrito" class="eliminar" data-id="${item.id}" data-sabor="${item.sabor}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>`;
+        });
+
+        document.getElementById("totalPrecio").textContent = `Total: $${total.toFixed(2)}`;
+        contadorCarrito.textContent = carrito.reduce((sum, p) => sum + p.cantidad, 0);
+
+        document.querySelectorAll(".eliminar").forEach(btn => {
+            btn.addEventListener("click", e => {
+                const id = parseInt(e.currentTarget.dataset.id);
+                const sabor = e.currentTarget.dataset.sabor;
+                carrito = carrito.filter(p => !(p.id === id && p.sabor === sabor));
+                actualizarCarrito();
+            });
+        });
+    }
+
+    // TOGGLE MOSTRAR CARRITO
+    document.getElementById("toggleCarrito").addEventListener("click", () => {
+        if (carritoDiv.style.display === "block") {
+            carritoDiv.style.display = "none";
+        } else {
+            carritoDiv.style.display = "block";
+            carritoDiv.focus();
+        }
+    });
+
+    // FILTRAR AL CAMBIAR SELECTS O BUSCADOR
+    filtroPresentacion.addEventListener("change", () => {
+        mostrarProductos();
+    });
+
+    filtroClase.addEventListener("change", () => {
+        cargarFiltroPresentacion(filtroClase.value);
+        mostrarProductos();
+    });
+    buscador.addEventListener("input", mostrarProductos);
+
+    // FUNCION PARA SCROLL A SECCIONES (nav)
+    function scrollToSection(e) {
+        e.preventDefault();
+        const href = e.currentTarget.getAttribute("href");
+        document.querySelector(href).scrollIntoView({ behavior: "smooth" });
+    }
+
+    // FORMULARIO CONTACTO
+    document.getElementById("formContacto").addEventListener("submit", e => {
+        e.preventDefault();
+        alert("Gracias por contactarnos, te responderemos pronto.");
+        e.target.reset();
+    });
+
+    // MODAL PAGO SCRIPTS
+    document.getElementById("btnPagar").addEventListener("click", () => {
+        const totalTexto = document.getElementById("totalPrecio").textContent;
+        document.getElementById("totalEnModal").textContent = totalTexto.replace("Total: ", "");
+        document.getElementById("modalPago").style.display = "flex";
+    });
+
+    document.getElementById("metodoPago").addEventListener("change", function() {
+        document.getElementById("pagoTarjeta").style.display = this.value === "tarjeta" ? "block" : "none";
+        document.getElementById("pagoTransferencia").style.display = this.value === "transferencia" ? "block" : "none";
+    });
+
+    document.getElementById("cancelarPago").addEventListener("click", function() {
+        document.getElementById("modalPago").style.display = "none";
+    });
+
+    // MODIFICADO: Ahora el formulario de pago abre la modal de dirección
+    document.getElementById("formPago").addEventListener("submit", function(e) {
+        e.preventDefault();
+        // Cierra el modal de pago y abre el modal de dirección de envío
+        document.getElementById("modalPago").style.display = "none";
+        modalDireccionEnvio.style.display = "flex";
+        document.body.style.overflow = "hidden"; // Asegura que no haya scroll de fondo
+    });
+
+
+    // MODAL INGREDIENTES SCRIPTS (RENOMBRADO A DESCRIPCIÓN)
+    document.addEventListener("click", function(e) {
+        if (e.target.closest(".btnIngredientes")) {
+            const id = parseInt(e.target.closest(".btnIngredientes").dataset.id);
+            let descripcion = "";
+            let preparacion = "";
+
+            if ([100, 101, 102].includes(id)) {
+                descripcion = "Nuestro café en grano está elaborado con granos 100% arábica cultivados en zonas montañosas. Tueste medio a oscuro, notas de cacao y nuez. Cuerpo intenso y acidez baja.";
+                preparacion = "Muele justo antes de preparar. Usa 1 cda (10g) por 180ml. Ideal para prensa francesa o espresso.";
+            } else if ([200, 201, 202].includes(id)) {
+                descripcion = "Café molido de molienda media, con granos seleccionados y tueste equilibrado. Perfil suave con notas de caramelo.";
+                preparacion = "Usa 1 a 2 cdas por taza. Ideal para cafetera de filtro o percoladora.";
+            } else if ([300, 301, 302].includes(id)) {
+                descripcion = "Café soluble instantáneo, secado por aspersión o liofilización, conserva aroma y sabor tradicional.";
+                preparacion = "Disuelve 1 a 2 cdas en agua caliente (no hirviendo). Puedes agregar leche o azúcar.";
+            } else if ([13, 14, 15].includes(id)) {
+                descripcion = "Café descafeinado con proceso natural con agua. Conserva el sabor del café real sin cafeína.";
+                preparacion = "Ideal para filtro o prensa. Acompáñalo con galletas o pan dulce.";
+            } else if ([17, 18, 19].includes(id)) {
+                descripcion = "Bebidas listas con extracto de café, leche y sabores naturales. Cremosas, dulces y refrescantes.";
+                preparacion = "Agita antes de consumir. Disfruta frías o tibias. Perfectas como snack.";
+            } else {
+                descripcion = "Café artesanal de calidad. Tueste medio y aroma equilibrado.";
+                preparacion = "Prepara según tu método favorito. Disfrútalo solo o con leche.";
+            }
+
+            document.getElementById("contenidoIngredientes").textContent = descripcion;
+            document.getElementById("preparacionRecomendada").textContent = `☕ Preparación recomendada: ${preparacion}`;
+            document.getElementById("modalIngredientes").style.display = "flex";
+        }
+    });
+
+    // ==============================================
+    // LOGIN & REGISTRATION LOGIC
+    // ==============================================
+
+    // Function to show/hide login/register forms within the modal
+    function showLoginForm() {
+        loginFormSection.style.display = "block";
+        registerFormSection.style.display = "none";
+        loginMessage.textContent = "";
+        registerMessage.textContent = "";
+        formLogin.reset();
+        formRegistro.reset(); // Also clear register form
+    }
+
+    function showRegisterForm() {
+        loginFormSection.style.display = "none";
+        registerFormSection.style.display = "block";
+        loginMessage.textContent = "";
+        registerMessage.textContent = "";
+        formLogin.reset(); // Also clear login form
+        formRegistro.reset();
+    }
+
+    // Event listeners for toggling between forms
+    showRegisterBtn.addEventListener("click", showRegisterForm);
+    showLoginBtn.addEventListener("click", showLoginForm);
+
+    // No event listener for cancelAuthModal as it's removed.
+    // If you add it back, consider making it refresh the page or redirect.
+    /*
+    cancelAuthModal.addEventListener("click", () => {
+        location.reload(); // Refresh the page to re-display the login modal
+    });
+    */
+
+    // Registration Form Submission
+    formRegistro.addEventListener("submit", function(e) {
+        e.preventDefault();
+        registerMessage.textContent = ""; // Clear previous messages
+
+        const nombre = regNombre.value.trim();
+        const email = regEmail.value.toLowerCase().trim();
+        const password = regPassword.value;
+        const confirmPassword = regConfirmPassword.value;
+
+        if (password.length < 6) {
+            registerMessage.textContent = "La contraseña debe tener al menos 6 caracteres.";
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            registerMessage.textContent = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.";
+            return;
+        }
+
+        // Get existing users (email as key, object with password and name as value)
+        let usuarios = JSON.parse(localStorage.getItem("usuarios") || "{}");
+
+        if (usuarios[email]) {
+            registerMessage.textContent = "Este correo electrónico ya está registrado.";
+            return;
+        }
+
+        // Store user data: email, password, and the full name (first word)
+        usuarios[email] = {
+            password: password,
+            name: nombre.split(" ")[0] // Store only the first word of the name
+        };
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+        // Automatically log in the new user
+        localStorage.setItem("currentUserName", nombre.split(" ")[0]); // Store the first word of the name
+        usuarioNombreSpan.textContent = "Bienveni@, " + nombre.split(" ")[0] + "!";
+        cerrarSesionBtn.style.display = "inline";
+        modalAuth.style.display = "none";
+        document.body.style.overflow = "auto";
+        formRegistro.reset(); // Clear the form
+    });
+
+    // Login Form Submission
+    formLogin.addEventListener("submit", function(e) {
+        e.preventDefault();
+        loginMessage.textContent = ""; // Clear previous messages
+
+        const correo = loginEmail.value.toLowerCase().trim();
+        const pass = loginPassword.value;
+
+        const usuarios = JSON.parse(localStorage.getItem("usuarios") || "{}");
+        const userData = usuarios[correo]; // Get the stored user object
+
+        if (!userData) { // Check if user data exists
+            loginMessage.textContent = "Este usuario no está registrado.";
+            return;
+        }
+
+        if (userData.password !== pass) { // Compare with the stored password
+            loginMessage.textContent = "Contraseña incorrecta.";
+            return;
+        }
+
+        // Use the stored name for display
+        localStorage.setItem("currentUserName", userData.name);
+        usuarioNombreSpan.textContent = "Bienvenid@, " + userData.name + "!";
+        cerrarSesionBtn.style.display = "inline";
+        modalAuth.style.display = "none";
+        document.body.style.overflow = "auto";
+        formLogin.reset(); // Clear the form
+    });
+
+    // Logout functionality
+    cerrarSesionBtn.addEventListener("click", () => {
+        localStorage.removeItem("currentUserName"); // Remove the stored username
+        localStorage.removeItem("carrito"); // Clear cart on logout
+        location.reload(); // Reload the page to reset state
+    });
+
+    // Initial load check for logged-in user
+    document.addEventListener("DOMContentLoaded", () => {
+        const usuarioGuardado = localStorage.getItem("currentUserName"); // Check for the stored name
+        if (usuarioGuardado) {
+            usuarioNombreSpan.textContent = "Bienvenid@, " + usuarioGuardado + "!";
+            cerrarSesionBtn.style.display = "inline";
+            // Do not show modalAuth if logged in
+            modalAuth.style.display = "none";
+            document.body.style.overflow = "auto";
+        } else {
+            // Show login modal if no user is logged in
+            modalAuth.style.display = "flex";
+            document.body.style.overflow = "hidden"; // Prevent scrolling
+        }
+
+        // Initialize product display and filters
+        cargarFiltroPresentacion();
+        cargarFiltroClase();
+        mostrarProductos();
+        actualizarCarrito(); // Load saved cart if any (optional, can be empty on load)
+    });
+
+    // Load carrito from localStorage
+    if (localStorage.getItem("carrito")) {
+        carrito = JSON.parse(localStorage.getItem("carrito"));
+        actualizarCarrito();
+    }
+
+
+    // Lógica para la nueva modal de dirección de envío
+    const modalDireccionEnvio = document.getElementById("modalDireccionEnvio");
+    const formDireccionEnvio = document.getElementById("formDireccionEnvio");
+    const cancelarDireccionBtn = document.getElementById("cancelarDireccion");
+
+    formDireccionEnvio.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const calleNumero = document.getElementById("calleNumero").value;
+        const colonia = document.getElementById("colonia").value;
+        const ciudad = document.getElementById("ciudad").value;
+        const codigoPostal = document.getElementById("codigoPostal").value;
+        const referencias = document.getElementById("referencias").value;
+
+        // Obtener el total del carrito para el mensaje de confirmación
+        const totalPagar = document.getElementById("totalPrecio").textContent;
+
+        // Aquí podrías guardar la dirección o enviarla a un servidor
+        console.log("Dirección de envío:", {
+            calleNumero,
+            colonia,
+            ciudad,
+            codigoPostal,
+            referencias
+        });
+
+        alert(`¡Pedido confirmado! Se ha pagado ${totalPagar}.\nTu café será enviado a:\n` +
+              `${calleNumero}, ${colonia}\n` +
+              `${ciudad}, C.P. ${codigoPostal}\n` +
+              `Referencias: ${referencias || 'Ninguna'}`);
+
+        // Limpiar carrito y cerrar modales
+        carrito = [];
+        actualizarCarrito();
+        modalDireccionEnvio.style.display = "none";
+        document.getElementById("carrito").style.display = "none";
+        document.body.style.overflow = "auto"; // Re-habilitar el scroll
+        formDireccionEnvio.reset(); // Limpiar el formulario de dirección
+    });
+
+    cancelarDireccionBtn.addEventListener("click", () => {
+        modalDireccionEnvio.style.display = "none";
+        document.body.style.overflow = "auto"; // Re-habilitar el scroll
+        formDireccionEnvio.reset(); // Limpiar el formulario de dirección
+    });
+
+    // Cerrar modal de dirección al hacer clic fuera del contenido
+    modalDireccionEnvio.addEventListener("click", e => {
+        if (e.target === modalDireccionEnvio) {
+            modalDireccionEnvio.style.display = "none";
+            document.body.style.overflow = "auto";
+            formDireccionEnvio.reset();
+        }
+    });
+
+</script>
+</body>
+</html>
