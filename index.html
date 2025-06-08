@@ -606,7 +606,7 @@
     <p>Síguenos en nuestras redes sociales:</p>
     <a aria-label="WhatsApp" href="https://whatsapp.com/channel/0029Vb5rtVbATRSjyz8Ns40n"><i class="fa-brands fa-whatsapp"></i></a>
     <a aria-label="Facebook" href="https://www.facebook.com/share/15tbZvCimN/"><i class="fa-brands fa-facebook"></i></a>
-    <a aria-label="Instagram" href="https://www.instagram.com/coffes_mafek_?igsh=MWN4eG1xNndhYXg3cA=="><i class="fa-brands fa-instagram"></i></a>
+    <a aria-label="Instagram" href="https://www.instagram.com/coffees_mafer_?igsh=MWUyenB0aDJzMzcyaQ=="><i class="fa-brands fa-instagram"></i></a>
     <p>Email: coffeesmafer@gmail.com</p>
     <p>Número de teléfono: 771-890-1380</p>
     <p>© 2025 Tienda Coffee'sMafer. Todos los derechos reservados.</p>
@@ -877,7 +877,6 @@
                 </article>`;
         });
 
-        // Agregar evento a botones comprar
         document.querySelectorAll(".btnComprar").forEach(btn => {
             btn.addEventListener("click", abrirModalSabor);
         });
@@ -899,7 +898,6 @@
         selectSaborModal.focus();
     }
 
-    // CONFIRMAR SABOR SELECCIONADO Y AGREGAR AL CARRITO
     confirmarSaborBtn.addEventListener("click", () => {
         const cantidad = parseInt(document.getElementById("cantidadSaborModal").value) || 1;
         const saborElegido = selectSaborModal.value;
@@ -920,8 +918,7 @@
         modalSabor.style.display = "none";
         productoTemporal = null;
     });
-
-    // CERRAR MODAL AL HACER CLICK FUERA DEL CONTENIDO
+    
     modalSabor.addEventListener("click", e => {
         if (e.target === modalSabor) {
             modalSabor.style.display = "none";
@@ -929,7 +926,6 @@
         }
     });
 
-    // ACTUALIZAR CARRITO Y MOSTRAR
     function actualizarCarrito() {
         const listaCarrito = document.getElementById("listaCarrito");
         listaCarrito.innerHTML = "";
@@ -966,7 +962,6 @@
         });
     }
 
-    // TOGGLE MOSTRAR CARRITO
     document.getElementById("toggleCarrito").addEventListener("click", () => {
         if (carritoDiv.style.display === "block") {
             carritoDiv.style.display = "none";
@@ -976,7 +971,6 @@
         }
     });
 
-    // FILTRAR AL CAMBIAR SELECTS O BUSCADOR
     filtroPresentacion.addEventListener("change", () => {
         mostrarProductos();
     });
@@ -987,7 +981,6 @@
     });
     buscador.addEventListener("input", mostrarProductos);
 
-    // FUNCION PARA SCROLL A SECCIONES (nav)
     function scrollToSection(e) {
         e.preventDefault();
         const href = e.currentTarget.getAttribute("href");
@@ -1001,7 +994,6 @@
         e.target.reset();
     });
 
-    // MODAL PAGO SCRIPTS
     document.getElementById("btnPagar").addEventListener("click", () => {
         const totalTexto = document.getElementById("totalPrecio").textContent;
         document.getElementById("totalEnModal").textContent = totalTexto.replace("Total: ", "");
@@ -1023,11 +1015,9 @@
         // Cierra el modal de pago y abre el modal de dirección de envío
         document.getElementById("modalPago").style.display = "none";
         modalDireccionEnvio.style.display = "flex";
-        document.body.style.overflow = "hidden"; // Asegura que no haya scroll de fondo
+        document.body.style.overflow = "hidden"; 
     });
 
-
-    // MODAL INGREDIENTES SCRIPTS (RENOMBRADO A DESCRIPCIÓN)
     document.addEventListener("click", function(e) {
         if (e.target.closest(".btnIngredientes")) {
             const id = parseInt(e.target.closest(".btnIngredientes").dataset.id);
@@ -1060,11 +1050,6 @@
         }
     });
 
-    // ==============================================
-    // LOGIN & REGISTRATION LOGIC
-    // ==============================================
-
-    // Function to show/hide login/register forms within the modal
     function showLoginForm() {
         loginFormSection.style.display = "block";
         registerFormSection.style.display = "none";
@@ -1086,14 +1071,6 @@
     // Event listeners for toggling between forms
     showRegisterBtn.addEventListener("click", showRegisterForm);
     showLoginBtn.addEventListener("click", showLoginForm);
-
-    // No event listener for cancelAuthModal as it's removed.
-    // If you add it back, consider making it refresh the page or redirect.
-    /*
-    cancelAuthModal.addEventListener("click", () => {
-        location.reload(); // Refresh the page to re-display the login modal
-    });
-    */
 
     // Registration Form Submission
     formRegistro.addEventListener("submit", function(e) {
@@ -1139,7 +1116,6 @@
         formRegistro.reset(); // Clear the form
     });
 
-    // Login Form Submission
     formLogin.addEventListener("submit", function(e) {
         e.preventDefault();
         loginMessage.textContent = ""; // Clear previous messages
@@ -1160,7 +1136,6 @@
             return;
         }
 
-        // Use the stored name for display
         localStorage.setItem("currentUserName", userData.name);
         usuarioNombreSpan.textContent = "Bienvenid@, " + userData.name + "!";
         cerrarSesionBtn.style.display = "inline";
@@ -1169,36 +1144,31 @@
         formLogin.reset(); // Clear the form
     });
 
-    // Logout functionality
     cerrarSesionBtn.addEventListener("click", () => {
         localStorage.removeItem("currentUserName"); // Remove the stored username
         localStorage.removeItem("carrito"); // Clear cart on logout
         location.reload(); // Reload the page to reset state
     });
 
-    // Initial load check for logged-in user
     document.addEventListener("DOMContentLoaded", () => {
         const usuarioGuardado = localStorage.getItem("currentUserName"); // Check for the stored name
         if (usuarioGuardado) {
             usuarioNombreSpan.textContent = "Bienvenid@, " + usuarioGuardado + "!";
             cerrarSesionBtn.style.display = "inline";
-            // Do not show modalAuth if logged in
+       
             modalAuth.style.display = "none";
             document.body.style.overflow = "auto";
         } else {
-            // Show login modal if no user is logged in
             modalAuth.style.display = "flex";
             document.body.style.overflow = "hidden"; // Prevent scrolling
         }
 
-        // Initialize product display and filters
         cargarFiltroPresentacion();
         cargarFiltroClase();
         mostrarProductos();
         actualizarCarrito(); // Load saved cart if any (optional, can be empty on load)
     });
 
-    // Load carrito from localStorage
     if (localStorage.getItem("carrito")) {
         carrito = JSON.parse(localStorage.getItem("carrito"));
         actualizarCarrito();
@@ -1221,7 +1191,6 @@
         // Obtener el total del carrito para el mensaje de confirmación
         const totalPagar = document.getElementById("totalPrecio").textContent;
 
-        // Aquí podrías guardar la dirección o enviarla a un servidor
         console.log("Dirección de envío:", {
             calleNumero,
             colonia,
@@ -1235,7 +1204,6 @@
               `${ciudad}, C.P. ${codigoPostal}\n` +
               `Referencias: ${referencias || 'Ninguna'}`);
 
-        // Limpiar carrito y cerrar modales
         carrito = [];
         actualizarCarrito();
         modalDireccionEnvio.style.display = "none";
@@ -1250,7 +1218,6 @@
         formDireccionEnvio.reset(); // Limpiar el formulario de dirección
     });
 
-    // Cerrar modal de dirección al hacer clic fuera del contenido
     modalDireccionEnvio.addEventListener("click", e => {
         if (e.target === modalDireccionEnvio) {
             modalDireccionEnvio.style.display = "none";
